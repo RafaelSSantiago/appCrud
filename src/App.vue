@@ -1,28 +1,38 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+   
+   <header>
+    <h1>Dashboard</h1>
+   </header>
+
+  <article v-for="infos in info" :key="infos.id">
+    <strong>{{infos.id}}</strong> <br />
+    <strong>{{infos.deals}}</strong> <br />
+    <strong>{{infos.seller.name}}</strong><br />
+    <strong>{{infos}}</strong>
+  </article>
+
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import api from './services/api';
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  data(){
+    return{
+      info:[]
+    }
+  },
+  async created(){
+    const response = await api.get('?api=posts');
+    this.info = response.data.content
   }
+  
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>
