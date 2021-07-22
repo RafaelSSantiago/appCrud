@@ -1,38 +1,38 @@
 <template>
   <div id="app">
-   
-   <header>
-    <h1>Dashboard</h1>
-   </header>
-
-  <article v-for="infos in info" :key="infos.id">
-    <strong>{{infos.id}}</strong> <br />
-    <strong>{{infos.deals}}</strong> <br />
-    <strong>{{infos.seller.name}}</strong><br />
-    <strong>{{infos}}</strong>
-  </article>
-
+    <div class="container marginBycss shadow p-3 mb-5 bg-body rounded">
+        <Header class="margin-personalizado"/>   
+       <Table />
   </div>
+  </div>
+   
 </template>
 
 <script>
-import api from './services/api';
+import Table from './components/Table.vue'
+import Header from './components/Header.vue';
+
 
 export default {
   name: 'App',
+  components:{
+    Table,
+    Header,
+  
+  },
   data(){
     return{
-      info:[]
+
     }
-  },
-  async created(){
-    const response = await api.get('?api=posts');
-    this.info = response.data.content
   }
-  
 }
-</script>
+</script >
 
-<style>
-
+<style scoped>
+  .marginBycss{
+    margin-top: 10%;
+  }
+  .margin-personalizado{
+    margin-bottom: 3%;
+  }
 </style>

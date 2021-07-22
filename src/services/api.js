@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const api = axios.create({
-    baseURL:'https://sd3-rogeriobastos.herokuapp.com/sales'
+    baseURL:'http://localhost:8080/api'
 });
 
 export default api;
