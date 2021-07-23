@@ -3,7 +3,7 @@
 
   <div class="card border-0">
         <div class="card-header">
-              <nav class="navbar navbar-light bg-light ">
+        <nav class="navbar navbar-light bg-light ">
         <div class="container-fluid ">
         <p class="fs-5">Gerenciar Produtos</p>
           <form class="row ">
@@ -25,11 +25,11 @@
 
     <tr>
       <th scope="col"> <input class="form-check-input" type="checkbox" id="checkboxNoLabel" value="" aria-label="..."></th>
-      <th >Codigo</th>
-      <th >Nome</th>
-      <th >Preço </th>
-      <th >Categoria</th>
-      <th >Status</th>
+      <th  @click="sort(['datasPaginados.codigo'])" >Codigo</th>
+      <th @click="sort(['datasPaginados.nome'])">Nome</th>
+      <th @click="sort(['datasPaginados.preco'])">Preço </th>
+      <th @click="sort(['datasPaginados.categoria'])">Categoria</th>
+      <th @click="sort(['datasPaginados.status'])">Status</th>
       <th :scope="col"></th>
     </tr>
   </thead>
@@ -100,6 +100,7 @@ name: 'Table',
       elementosPorPagina: 5,
       datasPaginados: [],
       paginaAtual: 1,
+     
 
     }
   },
@@ -145,6 +146,11 @@ getNextAll(){
   }
   this.getDataPagina(this.paginaAtual);
 },
+
+
+},
+computed:{
+  
 
 }
 }
