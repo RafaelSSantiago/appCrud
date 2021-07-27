@@ -1,18 +1,26 @@
 <template>
   <b-modal
-    @ok="save"
-    @hide="hide"
-
+    @close="onClose"
     :id="reference"
     v-model="isOpen"
     title="Detalhes do Produto"
   >
     <b-form>
-      <b-form-group id="input-group-1" label="Nome" label-for="input-1">
-        <b-form-input aria-describedby="input-1-live-feedback" :state="validateState('name')" type="text" v-model="formData.nome"></b-form-input>
-         <b-form-invalid-feedback
-          id="input-1-live-feedback"
-        >This is a required field and must be at least 3 characters.</b-form-invalid-feedback>
+      <b-form-group id="input-name-group">
+        <label class="mt-3" for="textarea-default">Nome</label>
+        <b-form-input
+          aria-describedby="input-name-feedback"
+          v-model="formData.nome"
+          :state="validateState('nome')"
+          type="text"
+        >
+        </b-form-input>
+        <b-form-invalid-feedback id="input-name-feedback"
+          >Este é um campo obrigatório.</b-form-invalid-feedback
+        >
+      </b-form-group>
+
+      <b-form-group>
         <b-row class="mt-3">
           <label for="textarea-default">Descrição</label>
           <b-col sm="23"> </b-col>
@@ -20,12 +28,24 @@
             <b-form-textarea id="textarea-large" size="lg"></b-form-textarea>
           </b-col>
         </b-row>
+      </b-form-group>
 
+      <b-form-group id="input-status-group">
         <label class="mt-3" for="textarea-default">Status</label>
-        <b-form-select :state="validation" v-model="formData.status" :options="statusOptions"></b-form-select>
+        <b-form-select
+          aria-describedby="input-status-feedback"
+          v-model="formData.status"
+          :options="statusOptions"
+          :state="validateState('status')"
+        ></b-form-select>
+        <b-form-invalid-feedback id="input-status-feedback"
+          >Este é um campo obrigatório.</b-form-invalid-feedback
+        >
+      </b-form-group>
 
+      <b-form-group>
         <label class="mt-3" for="textarea-default">Categoria</label>
-        <b-row cols="2" >
+        <b-row cols="2">
           <b-col
             ><b-form-radio
               v-model="formData.categoria"
@@ -59,134 +79,185 @@
             ></b-col
           >
         </b-row>
-
-        <b-row class="mt-3" cols="2">
-          <b-col>Preço</b-col>
-          <b-col>Quantidade</b-col>
-          <b-col>
-            <b-form-input
-              id="inline-form-input-name"
-              class="mb-2 mr-sm-2 mb-sm-0"
-              v-model="formData.preco"
-            ></b-form-input>
-          </b-col>
-          <b-col>
-            <b-form-input
-              id="inline-form-input-name"
-              class="mb-2 mr-sm-2 mb-sm-0"
-            ></b-form-input>
-          </b-col>
-        </b-row>
       </b-form-group>
-      
+
+      <b-row>
+        <b-col>
+          <b-row>
+            <b-col>Preço</b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-form-group id="input-preco-group">
+                <b-form-input
+                  aria-describedby="input-preco-feedback"
+                  :state="validateState('preco')"
+                  class="mb-2 mr-sm-2 mb-sm-0"
+                  v-model="formData.preco"
+                ></b-form-input>
+                <b-form-invalid-feedback id="input-name-feedback"
+                  >Este é um campo obrigatório.</b-form-invalid-feedback
+                >
+              </b-form-group>
+            </b-col>
+          </b-row>
+        </b-col>
+        <b-col>
+          <b-row>
+            <b-col>Quantidade</b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              <b-form-input class="mb-2 mr-sm-2 mb-sm-0"></b-form-input>
+            </b-col>
+          </b-row>
+        </b-col>
+      </b-row>
     </b-form>
+
+    <template v-slot:modal-footer>
+      <a @click="cancel">
+        <i class="far fa-times"></i>
+        Cancelar
+      </a>
+
+      <a @click="save">
+        <i class="far fa-check"></i>
+        Salvar
+      </a>
+    </template>
   </b-modal>
 </template>
 
 <script>
-import api  from '../../services/api'
-import { validationMixin } from "vuelidate";
-import { required, minLength } from "vuelidate/lib/validators";
+import api from "../../services/api";
+import { required } from "vuelidate/lib/validators";
 
 export default {
-    name: 'ProductForm',
-
-    props: {
-        opened: {
-            type: Boolean,
-            default: false,
-        },
-        product: {
-            type: Object,
-            default: () => ({}),
-        },
-        reference: {
-            type: String,
-            require: true,
-        }
+  name: "ProductForm",
+  props: {
+    opened: {
+      type: Boolean,
+      default: false,
     },
-   mixins: [validationMixin],
-    data () {
-        return {
-            isOpen: false,
-            formData: {
-                nome: '',      
-                categoria: null,
-                preco: '',     
-                status: null,
-            },
-            statusOptions: [
-                { value: "em_Estoque", text: "Em Estoque" },
-                { value: "sem_EStoque", text: "Sem Estoque" },
-            ],
-        }
+    product: {
+      type: Object,
+      default: () => ({}),
     },
+    reference: {
+      type: String,
+      require: true,
+    },
+  },
+  data() {
+    return {
+      isOpen: false,
+      formData: {
+        nome: "",
+        categoria: null,
+        preco: "",
+        status: null,
+      },
+      statusOptions: [
+        { value: "EMEstoque", text: "Em Estoque" },
+        { value: "SEMEStoque", text: "Sem Estoque" },
+      ],
+    };
+  },
+  validations: {
+    formData: {
+      nome: { required },
+      status: { required },
+      preco: { required },
+    },
+  },
 
-   validations: {
-    name: {
-      required,
-      minLength: minLength(3)
-    }
-   },
-      
+  methods: {
+    save() {
+      this.$v.formData.$touch();
+      if (this.$v.formData.$anyError) {
+        return;
+      }
 
-    methods: {
-        hide () {
-            this.$emit('hide');
-        },
-        save () {
-            if (this.product.id) {
-                  this.edit(this.formData);
-                return;
-            }
-               this.create(this.formData);
-            
-            
-            
-        },
-
-        async edit (product) {
-            await api.put(`produtos/${product.id}`, {
-             nome: product.nome,
-             preco: product.preco,
-             codigo: product.codigo,
-             categoria: product.categoria,
-             status: product.status,
-            });
-            console.info('Editando produto: ', product, product.id);
-        }, 
-
-        async create (product) {
-             await api.post("produtos", {
-             nome: product.nome,
-             preco: product.preco,
-             codigo: Math.random().toString(36).substring(7),
-             categoria: product.categoria,
-             status: product.status,
-            });
-        },
+      if (this.product.id) {
+        this.edit(this.formData);
+        this.hideModal();
+        return;
+      }
+      this.create(this.formData);
+      this.hideModal();
+    },
+    hideModal() {
+      this.$root.$emit("bv::hide::modal", this.reference, "#btnShow");
+      this.$emit("hide");
+    },
+    cancel() {
+      this.hideModal();
+      this.isOpen = false;
+    },
+    onClose() {
+      this.$emit("hide");
+    },
+    async edit(product) {
+      await api.put(`produtos/${product.id}`, {
+        nome: product.nome,
+        preco: product.preco,
+        codigo: product.codigo,
+        categoria: product.categoria,
+        status: product.status,
+      });
+      console.info("Editando produto: ", product, product.id);
     },
 
-    created () {
-        this.isOpen = this.opened;
+    async create(product) {
+      await api.post("produtos", {
+        nome: product.nome,
+        preco: product.preco,
+        codigo: Math.random().toString(36).substring(7),
+        categoria: product.categoria,
+        status: product.status,
+      });
     },
-
-    watch: {
-        opened (newValue) {
-            this.isOpen = newValue;
-        },
-        product (newValue) {
-            this.formData = newValue;
-        }
-    }
-}
+    validateState(name) {
+      const { $dirty, $error } = this.$v.formData[name];
+      return $dirty ? !$error : null;
+    },
+  },
+  created() {
+    this.isOpen = this.opened;
+  },
+  watch: {
+    opened(newValue) {
+      this.isOpen = newValue;
+    },
+    product(newValue) {
+      this.formData = newValue;
+    },
+  },
+};
 </script>
 
 <style lang="scss">
-  .modal-header { 
-    border-bottom: none !important;
+.modal-header {
+  border-bottom: none !important;
 }
-  .modal-footer{
-   border-top: none !important;
-  }
+.modal-footer {
+  border-top: none !important;
+}
+.modal-header {
+  border: 0px !important;
+}
+
+#delete-confirmation-message i {
+  margin-right: 10px;
+}
+
+.modal-footer a {
+  color: #61b3f4 !important;
+  cursor: pointer;
+}
+
+.modal-footer a:nth-child(1) {
+  margin-right: 20px;
+}
 </style>

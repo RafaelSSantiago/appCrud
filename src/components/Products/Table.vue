@@ -35,10 +35,11 @@
     />
 
     <b-table
-    :items="products"
-    :fields="fields"
-    :current-page="currentPage"
-    :per-page="perPage" 
+      :items="products"
+      :fields="fields"
+      :current-page="currentPage"
+      :per-page="perPage"
+      ref="table"
     >
       <template v-slot:head(selection)>
         <input
@@ -67,7 +68,6 @@
       <template #cell(preco)="data"> ${{ data.value }} </template>
     </b-table>
     <div class="fitPagination">
-
       <b-pagination
         :container-class="'pagination'"
         v-model="currentPage"
@@ -201,10 +201,8 @@ export default {
     },
     async fetchProducts() {
       const response = await api.get("produtos");
-      console.info('infos' ,response)
+      console.info("infos", response);
       this.products = this.mapIncomingProducts(response.data);
-      
-     
     },
     mapIncomingProducts(products) {
       return products.map((product) => {
@@ -223,19 +221,19 @@ export default {
     },
 
     async searchNome(nome) {
-      if(nome === ''){
-      const returnProducts = await api.get(`produtos`);
-       this.products = returnProducts.data
+      if (nome === "") {
+        const returnProducts = await api.get(`produtos`);
+        this.products = returnProducts.data;
         return;
       }
       const returnSearch = await api.get(`produtos/nome/${nome}`);
-      this.products = returnSearch.data
+      this.products = returnSearch.data;
     },
   },
 
   async mounted() {
     this.fetchProducts();
-  }, 
+  },
 
   watch: {
     allProductsSelected(newValue) {
@@ -245,9 +243,7 @@ export default {
 
       this.emitOnProductSelectionEvent();
     },
-     
   },
- 
 };
 </script>
 

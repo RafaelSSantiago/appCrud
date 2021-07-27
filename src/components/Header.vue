@@ -9,7 +9,7 @@
           >
             <i class="far fa-plus"></i> Novo
           </b-button>
-          
+
           <ProductFormCreation reference="product-form-create" />
           <DeleteAllButton :products="selectedProducts" />
         </div>
@@ -19,12 +19,12 @@
 </template>
 
 <script>
-import DeleteAllButton from './Products/DeleteAllButton.vue';
-import ProductFormCreation from './Products/Form.vue';
+import DeleteAllButton from "./Products/DeleteAllButton.vue";
+import ProductFormCreation from "./Products/Form.vue";
 
 export default {
   name: "Header",
-  
+
   components: {
     DeleteAllButton,
     ProductFormCreation,
@@ -33,12 +33,12 @@ export default {
   props: {
     selectedProducts: {
       type: Array,
-      default () {
+      default() {
         return [];
-      }
-    }
+      },
+    },
   },
-  
+
   data() {
     return {
       selected: [],
@@ -60,8 +60,8 @@ export default {
 }
 .header-personalizado {
   height: 80px;
-  background-color:#f8f9fa;
-  border: 1px solid ;
+  background-color: #f8f9fa;
+  border: 1px solid;
   border-color: #f8f9fa;
 }
 </style>
