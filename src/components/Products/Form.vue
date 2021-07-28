@@ -206,7 +206,6 @@ export default {
         categoria: product.categoria,
         status: product.status,
       });
-      console.info("Editando produto: ", product, product.id);
     },
 
     async create(product) {

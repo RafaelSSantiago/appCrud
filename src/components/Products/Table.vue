@@ -61,7 +61,7 @@
       <template v-slot:cell(actions)="data">
         <div class="product-actions">
           <EditButton :product="data.item" @click="onEdit" />
-          <DeleteButton :product="data.item" />
+          <DeleteButton @deleted="onDeleted" :product="data.item" />
         </div>
       </template>
 
@@ -201,7 +201,6 @@ export default {
     },
     async fetchProducts() {
       const response = await api.get("produtos");
-      console.info("infos", response);
       this.products = this.mapIncomingProducts(response.data);
     },
     mapIncomingProducts(products) {
@@ -228,6 +227,10 @@ export default {
       }
       const returnSearch = await api.get(`produtos/nome/${nome}`);
       this.products = returnSearch.data;
+    },
+    onDeleted(id) {
+      const index = this.products.findIndex((product) => product.id === id);
+      this.products.splice(index, 1);
     },
   },
 

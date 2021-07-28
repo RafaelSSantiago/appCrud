@@ -58,6 +58,7 @@ export default {
     },
     async deleteProduct() {
       await api.delete(`produtos/${this.product.id}`);
+      this.$emit("deleted", this.product.id);
       this.hideModal();
     },
   },
